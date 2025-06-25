@@ -72,7 +72,7 @@ function transferFrom(from, to, value){
   Utils.assert(fromValue !== false, 'Failed to get the value, probably because ' + from + ' has no value.');
   Utils.assert(Utils.int64Compare(fromValue, value) >= 0, from + ' Balance:' + fromValue + ' < transfer value:' + value + '.');
 
-  let allowValue = Utils.allowance(from, Chain.tx.sender);
+  let allowValue = allowance(from, Chain.tx.sender);
   Utils.assert(Utils.int64Compare(allowValue, value) >= 0, 'Allowance value:' + allowValue + ' < transfer value:' + value + ' from ' + from + ' to ' + to  + '.');
 
   let toValue = Chain.load(to);
@@ -102,12 +102,12 @@ function balanceOf(address){
 function init(input_str){
   let params = JSON.parse(input_str).params;
 
-  Utils.assert(Utils.stoI64Check(params.supply) === true && params.supply > 0 &&
-    typeof params.name === 'string' && params.name.length > 0 &&
-    typeof params.symbol === 'string' && params.symbol.length > 0 &&
-    typeof params.version === 'string' && params.version.length > 0 &&
-    typeof params.decimals === 'number' && params.decimals >= 0,
-    'Args check failed.');
+  Utils.assert(params.name !== undefined && params.name.length > 0, 'Param obj has no name.');
+  Utils.assert(params.supply !== undefined && params.supply.length > 0, 'Param obj has no supply.');
+  Utils.assert(params.symbol !== undefined && params.symbol.length > 0, 'Param obj has no symbol.');
+  Utils.assert(params.version !== undefined && params.version.length > 0, 'Param obj has no version.');
+  Utils.assert(params.decimals !== undefined, 'Param obj has no decimals.');
+
 
   let i = 0;
   let power = 1;
